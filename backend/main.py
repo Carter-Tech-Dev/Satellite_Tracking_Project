@@ -28,7 +28,7 @@ class SatRec(BaseModel):
 
 @app.get("/")
 def read_root():
-  return "Telemetry Projection Landing Page"
+  return "Satellite Tracking Project Landing Page"
 
 @app.get("/satellites")
 async def read_satellites() -> list[SatRec] | None:
