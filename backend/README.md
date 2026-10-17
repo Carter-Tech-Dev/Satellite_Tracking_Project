@@ -1,9 +1,32 @@
 # Backend Creation
 
-## Install Fastapi
+## Development Environment
+
+Create a virtual environment and then activate it using the following:
 
 ```bash
-pip3 install "fastapi[standard]"
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+This will ensure libraries installed for this project don't affect your global settings.
+
+## Creating the Database
+
+```bash
+pip install asyncpg asyncio python-dotenv
+```
+
+To create and seed the database:
+
+```bash
+python3 db_seed.py
+```
+
+## Creating the Server
+
+```bash
+pip3 install "fastapi[standard]" pydantic
 ```
 
 ## Running the Server
