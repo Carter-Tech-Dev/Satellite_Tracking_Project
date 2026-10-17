@@ -9,7 +9,21 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-This will ensure libraries installed for this project don't affect your global settings.
+This will ensure libraries installed for this project don't affect the system's global settings.
+
+## Testing
+
+Pytest is used in this project with the following plugins.
+
+```bash
+pip install -U pytest pytest-cov pytest-xdist
+```
+
+To run test coverage:
+
+```bash
+python3 -m pytest --cov-report=term-missing --cov
+```
 
 ## Creating the Database
 
