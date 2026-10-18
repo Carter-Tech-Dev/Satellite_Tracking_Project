@@ -231,7 +231,7 @@ async def load_csv_data(filename):
 async def main():
   #await create_database_if_not_exists()
   #await schema_and_seed()
-  await load_csv_data("./utils/satellites.csv")
+  await load_csv_data("./utils/satellite_data/active.csv")
 
 if __name__ == "__main__":
   asyncio.run(main())
