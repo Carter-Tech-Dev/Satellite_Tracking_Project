@@ -24,7 +24,7 @@ class SatRec(BaseModel):
   rev_at_epoch: int # 6483,
   bstar: float # ? -0.00011397759,
   mean_motion_dot: float # ? -1.09e-5,
-  mean_motion_ddot: int # 0
+  mean_motion_ddot: float # 0
 
 @app.get("/")
 def read_root():
