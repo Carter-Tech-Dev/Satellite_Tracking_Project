@@ -107,7 +107,7 @@ async def update_satellite_records():
   """This fetches data from Celestrak.org and saves the .csv locally to use 
   the satellite records for this project. The site limits fetches to once 
   every two hours. When two hours have passed since the last update of the
-  file_path, a new fetch will be executed.
+  file_path, a new fetch will be executed and the database will be updated.
   """
   try:
     # Get time of last active.csv update)
@@ -128,8 +128,7 @@ async def update_satellite_records():
           file.write(response.text)
         print("File updated successfully!")
 
-        await load_csv_data("./utils/satellite_data/active.csv")
-
+        await load_csv_data(file_path)
 
     else:
       print(f"\nData current. Next update can occur after {update_time.strftime("%H:%M:%S")}.\n")
