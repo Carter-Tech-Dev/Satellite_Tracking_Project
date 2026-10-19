@@ -15,14 +15,18 @@ import {
   ClockStep,
   ClockViewModel,
   Color,
+  Ion,
   createWorldTerrainAsync,
+  Terrain,
   JulianDate,
 } from 'cesium';
-import { SatelliteEntity } from './SatelliteEntity';
+//import { SatelliteEntity } from './SatelliteEntity';
 // import { kuiperSats } from '../data/...'
 import * as satellite from 'satellite.js';
 
-type OmmJson = Parameters<typeof satellite.json2satrec>[0];
+Ion.defaultAccessToken = import.meta.env.VITE_CESIUM_ION_TOKEN;
+console.log("Cesium token configured:", Boolean(import.meta.env.VITE_CESIUM_ION_TOKEN));
+//type OmmJson = Parameters<typeof satellite.json2satrec>[0];
 
 const createClockViewModel = (startDate: Date, minutes = 120): ClockViewModel => {
   const start = JulianDate.fromDate(startDate);
@@ -42,7 +46,7 @@ const createClockViewModel = (startDate: Date, minutes = 120): ClockViewModel =>
 }
 
 export const SatelliteViewer = () => {
-  const [ommRecords, setOmmRecords] = useState<OmmJson[]>([]);
+  //const [ommRecords, setOmmRecords] = useState<OmmJson[]>([]);
   //const [kuiperOmm, setKuiperOmm] = useState<OmmJson[]>([]);
 
   const startDate = useMemo(() => new Date(), []);
@@ -51,7 +55,7 @@ export const SatelliteViewer = () => {
     return createClockViewModel(startDate, 120);
   }, [startDate]);
 
-  useEffect(() => {
+  /* useEffect(() => {
     const loadSatellites = async () => {
       try {
         const ommData: OmmJson[] = [
@@ -77,16 +81,20 @@ export const SatelliteViewer = () => {
         ]
         //setKuiperOmm(ommData);
 
-        setOmmRecords(ommData);
+        //setOmmRecords(ommData);
       } catch (error) {
         console.error(error);
       }
     };
 
     loadSatellites();
-  }, []);
+  }, []); */
 
-  const terrainProvider = createWorldTerrainAsync();
+  const terrain = useMemo(
+    () => Terrain.fromWorldTerrain(),
+    []
+  ); // createWorldTerrainAsync();
+  
 
   const city = Cartesian3.fromDegrees(-104.8212, 41.1347, 100); // Cheyenne, WY
 
@@ -104,12 +112,13 @@ export const SatelliteViewer = () => {
 
   return (
     <Viewer
-      full terrainProvider={terrainProvider}
-      timeline
-      animation
+      full 
+      terrain={terrain}
+      //timeline
+      //animation
       clockViewModel={clockViewModel}
     >
-      {ommRecords.slice(0,1).map((omm) => (
+      {/* {ommRecords.slice(0,1).map((omm) => (
         <SatelliteEntity
           key={omm.NORAD_CAT_ID}
           omm={omm}
@@ -117,7 +126,7 @@ export const SatelliteViewer = () => {
           minutes={120}
           stepSeconds={30}
         />
-      ))}
+      ))} */}
       <Sun glowFactor={1.0} />
       <Moon show={true} />
       <Entity position={city} name='Cheyenne' description='Capitol of Wyoming'>
