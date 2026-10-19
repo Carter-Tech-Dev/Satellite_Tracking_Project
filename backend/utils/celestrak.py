@@ -28,7 +28,7 @@ satellite_data_types = {
   'mean_motion_ddot': float # 0.0
 }
 
-URL = "https://celestrak.org/NORAD/elements/gp.php?GROUP=active&FORMAT=tle" # all records
+URL = "https://celestrak.org/NORAD/elements/gp.php?GROUP=active&FORMAT=csv" # all records
 
 file_path = "./utils/satellite_data/active.csv"
 
@@ -103,35 +103,43 @@ async def load_csv_data(filename):
 
   await conn.close()
 
-async def update_satellite_records():
+async def update_satellite_records() -> None:
   """This fetches data from Celestrak.org and saves the .csv locally to use 
   the satellite records for this project. The site limits fetches to once 
   every two hours. When two hours have passed since the last update of the
   file_path, a new fetch will be executed and the database will be updated.
   """
   try:
-    # Get time of last active.csv update)
-    timestamp = os.path.getmtime(file_path)
-    last_update = datetime.fromtimestamp(timestamp)
+    # If the file exists, determine the time it can update (after two hours)
+    if os.path.exists(file_path):
 
-    # Next update can occur after two hours
-    update_time = last_update + timedelta(hours=2)
+      # Get time of last active.csv update)
+      timestamp = os.path.getmtime(file_path)
+      last_update = datetime.fromtimestamp(timestamp)
 
-    if datetime.now() > update_time:
-      response = requests.get(
-        URL,
-        timeout=5
-      )
+      # Next update can occur after two hours
+      update_time = last_update + timedelta(hours=2)
+      
+      if datetime.now() < update_time:
+        # Print when next update can occur and exit function
+        print(f"\nData current.")
+        print(f"Next update can occur after {update_time.strftime("%H:%M:%S")}.\n")
+        return
 
-      if response.status_code == 200:
-        with open(file_path, "w", encoding="utf=8") as file:
-          file.write(response.text)
-        print("File updated successfully!")
+    # Request csv data
+    response = requests.get(
+      URL,
+      timeout=5
+    )
 
-        await load_csv_data(file_path)
+    # If successful, rewrite .csv file with response
+    if response.status_code == 200:
+      with open(file_path, "w", encoding="utf=8") as file:
+        file.write(response.text)
+      print("File updated successfully!")
 
-    else:
-      print(f"\nData current. Next update can occur after {update_time.strftime("%H:%M:%S")}.\n")
+      # Update database with .csv file
+      await load_csv_data(file_path)
 
   except requests.exceptions.HTTPError as http_err:
     print(f"HTTP error occurred: {http_err}")
