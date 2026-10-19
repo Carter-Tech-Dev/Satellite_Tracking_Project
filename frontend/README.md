@@ -96,15 +96,15 @@ Edit `vite.config.ts` by adding the cesium references below.
 ```ts
 import { defineConfig } from 'vite'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
-import cesium from 'vite-plugin-cesium'
 import babel from '@rolldown/plugin-babel'
+import cesium from 'vite-plugin-cesium'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    cesium(),
-    babel({ presets: [reactCompilerPreset()] })
+    babel({ presets: [reactCompilerPreset()] }),
+    cesium()
   ],
 })
 ```
