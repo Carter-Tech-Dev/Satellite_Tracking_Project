@@ -111,9 +111,9 @@ async def schema_and_seed() -> None:
 
   await conn.close()
 
-async def main():
-  await create_database_if_not_exists()
-  await schema_and_seed()
+# async def main():
+#   await create_database_if_not_exists()
+#   await schema_and_seed()
 
-if __name__ == "__main__":
-  asyncio.run(main())
+# if __name__ == "__main__":
+#   asyncio.run(main())
